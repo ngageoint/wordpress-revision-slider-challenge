@@ -325,26 +325,26 @@ function handleScrollAndSliderChange() {
 		var delElementsBelow = findElementsBelowViewport(delElements);
 
 		if (insElementsAbove.length > 0) {
-			jQuery('#insAbove').show();
+			jQuery('#insAbove').css('visibility', 'visible');
 		} else {
-			jQuery('#insAbove').hide();
+			jQuery('#insAbove').css('visibility', 'hidden');
 		}
 
 		if (insElementsBelow.length > 0) {
-			jQuery('#insBelow').show();
+			jQuery('#insBelow').css('visibility', 'visible');
 		} else {
-			jQuery('#insBelow').hide();
+			jQuery('#insBelow').css('visibility', 'hidden');;
 		}
 
 		if (delElementsAbove.length > 0){
-			jQuery('#delAbove').show();
+			jQuery('#delAbove').css('visibility', 'visible');
 		} else {
-			jQuery('#delAbove').hide();
+			jQuery('#delAbove').css('visibility', 'hidden');;
 		}
 
 		if (delElementsBelow.length > 0) {
-			jQuery('#delBelow').show();
+			jQuery('#delBelow').css('visibility', 'visible');
 		}else {
-			jQuery('#delBelow').hide();
+			jQuery('#delBelow').css('visibility', 'hidden');
 		}
 }

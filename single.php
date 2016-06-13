@@ -63,7 +63,7 @@ get_header(); ?>
             if ( count(wp_get_post_revisions( $wp_query->post->ID )) > 1) { ?>
                  <div id="revChanger"  class="pathfinder-column">
 		    <div id="aboveControls">
-		    	<input class="hide" type="button" id="insAbove" value="Inserted"/><input class="hide" type="button" id="delAbove" value="Removed" />
+		    	<input class="revInsert" type="button" id="insAbove" value="Inserted"/><input class="hide revDelete" type="button" id="delAbove" value="Removed" />
 		    </div>
 	    
                  <div class="rev-select-box">
@@ -75,7 +75,7 @@ get_header(); ?>
                      </div>
                 <div id='slider-vertical'></div>
 		<div id="belowControls">
-		    <input class="hide" type="button" id="insBelow" value="Inserted" /><input class="hide" type="button" id="delBelow" value="Removed" />
+		    <input class="revInsert" type="button" id="insBelow" value="Inserted" /><input class="hide revDelete" type="button" id="delBelow" value="Removed" />
 		</div>
             </div>
             <?php } ?>
