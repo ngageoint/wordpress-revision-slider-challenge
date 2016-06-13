@@ -22,6 +22,8 @@
         
         var $body = jQuery("body");
         var $window = jQuery(window); 
+
+	$window.on('DOMContentLoaded load resize scroll', handleScrollAndSliderChange);
         //$body.append( "<div id='revChanger'><form> <span class='ui-icon ui-icon-triangle-1-w' style='display:inline-block;'></span><select id='revSelect'></select><span class='ui-icon ui-icon-triangle-1-e' style='display:inline-block;'></span></form><div id='slider-vertical'></div></div>" );
            
         var $slider = jQuery( "#slider-vertical" ); 
@@ -134,6 +136,7 @@
     
      //   console.log("changes", changes); 
        console.log("changes.length", changes.length);  
+	handleScrollAndSliderChange();
     if(changes.length > 0){
            fadeAndHighlight();
 
@@ -157,7 +160,7 @@
                 if(nextTop != curTop){
                     console.log("scrolling")
                     //jQuery('html, body').animate({scrollTop:curTop },250, fadeInOut)
-                    jQuery('html, body').scrollTo($me, 250, {onAfter: fadeInOut, offset:{top:windowOffset}}); 
+                    // jQuery('html, body').scrollTo($me, 250, {onAfter: fadeInOut, offset:{top:windowOffset}}); 
                 }else{
                     console.log("not scrolling"); 
                     fadeInOut();
@@ -165,18 +168,19 @@
 
                 function fadeInOut(){
                      //console.log($me, jQuery(this)); 
-                    if($me.hasClass("revDelete")){
-                       $me.fadeOut(FADE_TIME, function(){
+                    // if($me.hasClass("revDelete")){
+                      // $me.fadeOut(FADE_TIME, function(){
                            //console.log("fade out", $me, jQuery(this), $me.parent().prop("tagName") ); 
-                            var myParent = $me.parent();
-                            if(myParent.prop('tagName') === 'LI' && myParent.has('.revInsert').length === 0 ){
-                                myParent.remove(); 
-                               changes.splice(changeIndex); 
-                            }
-                           nextChange();
-                        });
-                    }
-                    else if($me.hasClass("revInsert")){
+                           // var myParent = $me.parent();
+                          //  if(myParent.prop('tagName') === 'LI' && myParent.has('.revInsert').length === 0 ){
+                          //      myParent.remove(); 
+                         //      changes.splice(changeIndex); 
+                         //   }
+                       //    nextChange();
+                     //   });
+                   // }
+                    // else 
+		    if($me.hasClass("revInsert")){
                         console.log("gonna fade in ", $me.html()); 
                         $me.fadeIn(FADE_TIME, function(){
                             console.log("done fading", $me.html()); 
@@ -264,3 +268,83 @@ var timer;
      } // end the 2 main ifs */
   
   });
+
+function findElementsAboveViewport (elements) {
+	
+	var rv = [];
+    //special bonus for those using jQuery
+    jQuery.each(elements, function(index, element) {
+    	var rect = element.getBoundingClientRect();
+	if (rect.bottom < 0 && rect.top < 0) {
+		rv.push(element);
+	}
+    });
+
+    return rv;
+}
+
+function findElementsBelowViewport (elements) {
+	
+	var rv = [];
+    //special bonus for those using jQuery
+    jQuery.each(elements, function(index, element) {
+    	var rect = element.getBoundingClientRect();
+	if (rect.top > (window.innerHeight || document.documentElement.clientHeight) 
+		&& rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+		rv.push(element);
+	}
+    });
+
+    return rv;
+}
+
+// http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+function isElementInViewport (el) {
+
+    //special bonus for those using jQuery
+    if (typeof jQuery === "function" && el instanceof jQuery) {
+        el = el[0];
+    }
+
+    var rect = el.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+    );
+}
+
+function handleScrollAndSliderChange() {
+		var insElements = jQuery('.revInsert');		
+		var delElements = jQuery('.revDelete');
+		var insElementsAbove = findElementsAboveViewport(insElements);
+		var insElementsBelow = findElementsBelowViewport(insElements);
+		var delElementsAbove = findElementsAboveViewport(delElements);
+		var delElementsBelow = findElementsBelowViewport(delElements);
+
+		if (insElementsAbove.length > 0) {
+			jQuery('#insAbove').show();
+		} else {
+			jQuery('#insAbove').hide();
+		}
+
+		if (insElementsBelow.length > 0) {
+			jQuery('#insBelow').show();
+		} else {
+			jQuery('#insBelow').hide();
+		}
+
+		if (delElementsAbove.length > 0){
+			jQuery('#delAbove').show();
+		} else {
+			jQuery('#delAbove').hide();
+		}
+
+		if (delElementsBelow.length > 0) {
+			jQuery('#delBelow').show();
+		}else {
+			jQuery('#delBelow').hide();
+		}
+}
