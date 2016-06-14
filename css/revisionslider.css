@@ -17,7 +17,7 @@
 @media screen and (min-width: 401px) {
     
     
-#revChanger {  z-index:999999; width:20%; height: 80%; position: fixed; left: 65%; display:block; overflow-y: scroll;   }
+#revChanger {  z-index:999999; width:20%; height: 70%; position: fixed; left: 65%; display:block; overflow-y: scroll;   }
 #background-explainer { width:100%;clear:none; font-size: 0.8em; padding-top:20px; }
 
     #center-col { margin:0; }
