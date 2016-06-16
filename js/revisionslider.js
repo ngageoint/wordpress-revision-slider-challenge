@@ -78,25 +78,33 @@
     jQuery('#insAbove').click(function(){
 	var insElements = jQuery('.revInsert');
 	var insAbove = findElementsAboveViewport(insElements);
-	jQuery.scrollTo(insAbove[insAbove.length - 1], 100, { offset: -50 });
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(insAbove[insAbove.length - 1], 100, { offset: height });
     });
 
     jQuery('#delAbove').click(function(){
 	var delElements = jQuery('.revDelete');
 	var delAbove = findElementsAboveViewport(delElements);
-	jQuery.scrollTo(delAbove[delAbove.length - 1], 100, { offset: -50 });
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(delAbove[delAbove.length - 1], 100, { offset: height });
     });
 
     jQuery('#insBelow').click(function(){
 	var insElements = jQuery('.revInsert');
 	var insBelow = findElementsBelowViewport(insElements);
-	jQuery.scrollTo(insBelow[insBelow.length -1], 100, { offset: -50 });
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(insBelow[insBelow.length -1], 100, { offset: height });
     });
 
     jQuery('#delBelow').click(function(){
 	var delElements = jQuery('.revDelete');
 	var delBelow = findElementsBelowViewport(delElements);
-	jQuery.scrollTo(delBelow[delBelow.length - 1], 100, { offset: -50 });
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(delBelow[delBelow.length - 1], 100, { offset: height });
     });
 
     jQuery(".callout").click(function(){
@@ -294,12 +302,12 @@ var timer;
   });
 
 function findElementsAboveViewport (elements) {
-	
+	var height = jQuery('#wpadminbar').length === 0 ? 48 : 80;
 	var rv = [];
     //special bonus for those using jQuery
     jQuery.each(elements, function(index, element) {
     	var rect = element.getBoundingClientRect();
-	if (rect.bottom < 48 && rect.top < 48) {
+	if (rect.bottom < height && rect.top < height) {
 		rv.push(element);
 	}
     });
