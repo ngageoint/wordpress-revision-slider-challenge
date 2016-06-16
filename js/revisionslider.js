@@ -58,8 +58,8 @@
              for (var i = vals; i >= 0; i--) {
             // for (var i = 0; i <= vals; i++) {  
                 var jsDate = new Date(ajax_object.revisions[keys[i]].post_date.replace(/-/g,'/')) ;
-                var d = jQuery.datepicker.formatDate('dd M yy', jsDate)
-                var lbl = jQuery('<div class="callout right" id="callout-' + counter + '"><b>Revision ' + i + ':</b> <br/>'+ d +'<br/>' + ("0" +String(jsDate.getHours())).slice(-2) +  ("0" +String(jsDate.getMinutes())).slice(-2) + '</div>').css({position: 'absolute', left: '12px', top: (counter/vals*100)+'%', marginTop: "-22px"});
+                var d = formatDate(jsDate);
+                var lbl = jQuery('<div class="callout right" id="callout-' + counter + '"><b>' + (i == 0 ? "Initial Revision" : "Revision " + i) + ':</b> <br/>'+ d +'<br/>' + '</div>').css({position: 'absolute', left: '12px', top: (counter/vals*100)+'%', marginTop: "-22px"});
                 $slider.append(lbl);
                   
                 console.log(lbl.css("top"));  
@@ -75,6 +75,30 @@
              document.updateArticleToRevision(this.selectedIndex); 
             $slider.slider({value: this.selectedIndex});
        });
+    jQuery('#insAbove').click(function(){
+	var insElements = jQuery('.revInsert');
+	var insAbove = findElementsAboveViewport(insElements);
+	jQuery.scrollTo(insAbove[insAbove.length - 1], 100, { offset: -50 });
+    });
+
+    jQuery('#delAbove').click(function(){
+	var delElements = jQuery('.revDelete');
+	var delAbove = findElementsAboveViewport(delElements);
+	jQuery.scrollTo(delAbove[delAbove.length - 1], 100, { offset: -50 });
+    });
+
+    jQuery('#insBelow').click(function(){
+	var insElements = jQuery('.revInsert');
+	var insBelow = findElementsBelowViewport(insElements);
+	jQuery.scrollTo(insBelow[insBelow.length -1], 100, { offset: -50 });
+    });
+
+    jQuery('#delBelow').click(function(){
+	var delElements = jQuery('.revDelete');
+	var delBelow = findElementsBelowViewport(delElements);
+	jQuery.scrollTo(delBelow[delBelow.length - 1], 100, { offset: -50 });
+    });
+
     jQuery(".callout").click(function(){
         var id = jQuery(this).prop("id");
         id = id.substring(id.indexOf("-")+1,id.length);
@@ -275,7 +299,7 @@ function findElementsAboveViewport (elements) {
     //special bonus for those using jQuery
     jQuery.each(elements, function(index, element) {
     	var rect = element.getBoundingClientRect();
-	if (rect.bottom < 0 && rect.top < 0) {
+	if (rect.bottom < 48 && rect.top < 48) {
 		rv.push(element);
 	}
     });
@@ -347,4 +371,8 @@ function handleScrollAndSliderChange() {
 		}else {
 			jQuery('#delBelow').css('visibility', 'hidden');
 		}
+}
+
+function formatDate(date) {
+	return date.toDateString() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 }
