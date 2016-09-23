@@ -17,7 +17,7 @@
 @media screen and (min-width: 401px) {
     
     
-#revChanger {  z-index:999999; width:15%; height: 100%;   }
+#revChanger {  z-index:999999; width:20%; height: 85%; position: fixed; left: 65%; display:block; overflow-y: scroll;   }
 #background-explainer { width:100%;clear:none; font-size: 0.8em; padding-top:20px; }
 
     #center-col { margin:0; }
@@ -61,7 +61,7 @@
 /* /end grid customizations */
 
 #slider-vertical { 
-       height: 90%; 
+       height: 70%; 
     margin-top:20px;
     margin-left:30%;
 }
@@ -85,7 +85,7 @@ body, html { height:100%; }
 	}
 
 	.admin-bar.masthead-fixed #revChanger  {
-		top: 84px;
+		top: 15%;
 	}
 
 /*.footer-sidebar:after, .hentry:after, .gallery:after, .slider-direction-nav:after, .contributor-info:after, .search-box:after, [class*="pathfinder"]:after, [class*="site"]:after */
@@ -116,16 +116,25 @@ body, html { height:100%; }
 .pathfinder-3col {position: relative; top:0px; left:0px; padding-top: 12px; height:100%;display: table; width: 100%; table-layout: auto;}
 
 
-.pathfinder-column { display: table-cell; height:100%; vertical-align: top;}
+.pathfinder-column { display: inline-block; height:100%; vertical-align: top; width:65%; margin-left: 15%}
 
 
 article {position: relative;  } 
 
-.site-content .entry-content{float:left; clear:none; border-left:1px solid #ccc; }
+.site-content .entry-content{float:left; clear:none; }
 
-.revInsert, .revInsert > * { background-color: #81FF65; border: 1px solid #3CE516; border-collapse: collapse;} /* #e6ffe6 original: 24890d*/
+#belowControls {
+	margin-top:15%;
+}
 
-.revDelete, .revDelete > * { background-color: #ffe6e6; }
+input.revInsert, input.revDelete {
+	padding: 5%;
+	display: inline;
+}
+
+.revInsert, .revInsert > * { background-color: #81FF65 !important; border: 1px solid #3CE516; border-collapse: collapse;} /* #e6ffe6 original: 24890d*/
+
+.revDelete, .revDelete > * { background-color: #ffe6e6 !important; }
 
 .revInsert a, .revDelete a { text-decoration: none;}
 
@@ -214,5 +223,12 @@ div.callout {
 	bottom: -20px;
 	border-top: 10px solid #444;
 }
-    
+ .post-navigation, .comments-area {
+	margin: 24px auto 48px;
+ 	display: block;
+	width: 65%;  
+}
+
+.hide {
+ 	display:none;
 } 

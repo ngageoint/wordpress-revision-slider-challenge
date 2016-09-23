@@ -22,6 +22,8 @@
         
         var $body = jQuery("body");
         var $window = jQuery(window); 
+
+	$window.on('DOMContentLoaded load resize scroll', handleScrollAndSliderChange);
         //$body.append( "<div id='revChanger'><form> <span class='ui-icon ui-icon-triangle-1-w' style='display:inline-block;'></span><select id='revSelect'></select><span class='ui-icon ui-icon-triangle-1-e' style='display:inline-block;'></span></form><div id='slider-vertical'></div></div>" );
            
         var $slider = jQuery( "#slider-vertical" ); 
@@ -56,8 +58,8 @@
              for (var i = vals; i >= 0; i--) {
             // for (var i = 0; i <= vals; i++) {  
                 var jsDate = new Date(ajax_object.revisions[keys[i]].post_date.replace(/-/g,'/')) ;
-                var d = jQuery.datepicker.formatDate('dd M yy', jsDate)
-                var lbl = jQuery('<div class="callout right" id="callout-' + counter + '"><b>Revision ' + i + ':</b> <br/>'+ d +'<br/>' + ("0" +String(jsDate.getHours())).slice(-2) +  ("0" +String(jsDate.getMinutes())).slice(-2) + '</div>').css({position: 'absolute', left: '12px', top: (counter/vals*100)+'%', marginTop: "-22px"});
+                var d = formatDate(jsDate);
+                var lbl = jQuery('<div class="callout right" id="callout-' + counter + '"><b>' + (i == 0 ? "Initial Revision" : "Revision " + i) + ':</b> <br/>'+ d +'<br/>' + '</div>').css({position: 'absolute', left: '12px', top: (counter/vals*100)+'%', marginTop: "-22px"});
                 $slider.append(lbl);
                   
                 console.log(lbl.css("top"));  
@@ -73,6 +75,38 @@
              document.updateArticleToRevision(this.selectedIndex); 
             $slider.slider({value: this.selectedIndex});
        });
+    jQuery('#insAbove').click(function(){
+	var insElements = jQuery('.revInsert');
+	var insAbove = findElementsAboveViewport(insElements);
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(insAbove[insAbove.length - 1], 100, { offset: height });
+    });
+
+    jQuery('#delAbove').click(function(){
+	var delElements = jQuery('.revDelete');
+	var delAbove = findElementsAboveViewport(delElements);
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(delAbove[delAbove.length - 1], 100, { offset: height });
+    });
+
+    jQuery('#insBelow').click(function(){
+	var insElements = jQuery('.revInsert');
+	var insBelow = findElementsBelowViewport(insElements);
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(insBelow[insBelow.length -1], 100, { offset: height });
+    });
+
+    jQuery('#delBelow').click(function(){
+	var delElements = jQuery('.revDelete');
+	var delBelow = findElementsBelowViewport(delElements);
+	var height = -50;
+	if (jQuery('#wpadminbar').length !== 0) height -= 32;
+	jQuery.scrollTo(delBelow[delBelow.length - 1], 100, { offset: height });
+    });
+
     jQuery(".callout").click(function(){
         var id = jQuery(this).prop("id");
         id = id.substring(id.indexOf("-")+1,id.length);
@@ -134,6 +168,7 @@
     
      //   console.log("changes", changes); 
        console.log("changes.length", changes.length);  
+	handleScrollAndSliderChange();
     if(changes.length > 0){
            fadeAndHighlight();
 
@@ -157,7 +192,7 @@
                 if(nextTop != curTop){
                     console.log("scrolling")
                     //jQuery('html, body').animate({scrollTop:curTop },250, fadeInOut)
-                    jQuery('html, body').scrollTo($me, 250, {onAfter: fadeInOut, offset:{top:windowOffset}}); 
+                    // jQuery('html, body').scrollTo($me, 250, {onAfter: fadeInOut, offset:{top:windowOffset}}); 
                 }else{
                     console.log("not scrolling"); 
                     fadeInOut();
@@ -165,18 +200,19 @@
 
                 function fadeInOut(){
                      //console.log($me, jQuery(this)); 
-                    if($me.hasClass("revDelete")){
-                       $me.fadeOut(FADE_TIME, function(){
+                    // if($me.hasClass("revDelete")){
+                      // $me.fadeOut(FADE_TIME, function(){
                            //console.log("fade out", $me, jQuery(this), $me.parent().prop("tagName") ); 
-                            var myParent = $me.parent();
-                            if(myParent.prop('tagName') === 'LI' && myParent.has('.revInsert').length === 0 ){
-                                myParent.remove(); 
-                               changes.splice(changeIndex); 
-                            }
-                           nextChange();
-                        });
-                    }
-                    else if($me.hasClass("revInsert")){
+                           // var myParent = $me.parent();
+                          //  if(myParent.prop('tagName') === 'LI' && myParent.has('.revInsert').length === 0 ){
+                          //      myParent.remove(); 
+                         //      changes.splice(changeIndex); 
+                         //   }
+                       //    nextChange();
+                     //   });
+                   // }
+                    // else 
+		    if($me.hasClass("revInsert")){
                         console.log("gonna fade in ", $me.html()); 
                         $me.fadeIn(FADE_TIME, function(){
                             console.log("done fading", $me.html()); 
@@ -264,3 +300,87 @@ var timer;
      } // end the 2 main ifs */
   
   });
+
+function findElementsAboveViewport (elements) {
+	var height = jQuery('#wpadminbar').length === 0 ? 48 : 80;
+	var rv = [];
+    //special bonus for those using jQuery
+    jQuery.each(elements, function(index, element) {
+    	var rect = element.getBoundingClientRect();
+	if (rect.bottom < height && rect.top < height) {
+		rv.push(element);
+	}
+    });
+
+    return rv;
+}
+
+function findElementsBelowViewport (elements) {
+	
+	var rv = [];
+    //special bonus for those using jQuery
+    jQuery.each(elements, function(index, element) {
+    	var rect = element.getBoundingClientRect();
+	if (rect.top > (window.innerHeight || document.documentElement.clientHeight) 
+		&& rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+		rv.push(element);
+	}
+    });
+
+    return rv;
+}
+
+// http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+function isElementInViewport (el) {
+
+    //special bonus for those using jQuery
+    if (typeof jQuery === "function" && el instanceof jQuery) {
+        el = el[0];
+    }
+
+    var rect = el.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+    );
+}
+
+function handleScrollAndSliderChange() {
+		var insElements = jQuery('.revInsert');		
+		var delElements = jQuery('.revDelete');
+		var insElementsAbove = findElementsAboveViewport(insElements);
+		var insElementsBelow = findElementsBelowViewport(insElements);
+		var delElementsAbove = findElementsAboveViewport(delElements);
+		var delElementsBelow = findElementsBelowViewport(delElements);
+
+		if (insElementsAbove.length > 0) {
+			jQuery('#insAbove').css('visibility', 'visible');
+		} else {
+			jQuery('#insAbove').css('visibility', 'hidden');
+		}
+
+		if (insElementsBelow.length > 0) {
+			jQuery('#insBelow').css('visibility', 'visible');
+		} else {
+			jQuery('#insBelow').css('visibility', 'hidden');;
+		}
+
+		if (delElementsAbove.length > 0){
+			jQuery('#delAbove').css('visibility', 'visible');
+		} else {
+			jQuery('#delAbove').css('visibility', 'hidden');;
+		}
+
+		if (delElementsBelow.length > 0) {
+			jQuery('#delBelow').css('visibility', 'visible');
+		}else {
+			jQuery('#delBelow').css('visibility', 'hidden');
+		}
+}
+
+function formatDate(date) {
+	return date.toDateString() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+}
