@@ -1,6 +1,6 @@
 ###Living Stories Contest Winner###
 
-Source code from “Living Stories Contest” winner August 17, 2016.
+Source code from “Living Stories Challenge” winner August 17, 2016.
 
 The "VCR button" modifications made from the winning code will be open sourced to NGA's GitHub account soon.
 
@@ -9,6 +9,8 @@ See [NGA press release](https://www.nga.mil/MediaRoom/News/Pages/First-Challenge
 See [original Challenge.gov post](https://www.challenge.gov/challenge/living-stories-challenge/)
 
 ##Wordpress Revision Slider##
+
+Initial base of code for the "Living Stories Challenge"
 
 This theme contains modifications to the Wordpress Twenty Fourteen theme which allows revisions to a post to be interactively displayed within the post itself rather than a hidden function. The goal of this software is to get readers comfortable with consuming stories written with version control.  
 
